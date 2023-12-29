@@ -1,0 +1,34 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# environment file
+.env
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+envlist
+# production
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.package-lock.json
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+*.text
+
+package-lock.json
+.bashrc
+.zshrc
+.profile
+.zshrc.save
