@@ -7,7 +7,7 @@ const isAuthenticated = (req, res, next) => {
   let token;
 
   // Check if the Authorization header is present and starts with "Bearer "
-  console.log("{ token }", req.headers);
+  // console.log("{ token }", req.headers);
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith("Bearer ")) {
     token = authHeader.slice(7); // Extract the token after "Bearer "
