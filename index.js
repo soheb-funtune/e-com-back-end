@@ -1,9 +1,9 @@
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-const Razorpay = require("Razorpay");
 const path = require("path");
 const userRoutes = require("./routes/user");
+const paymentRoutes = require("./routes/rezorpay-payment");
 const Connection = require("./database/connection-db");
 const Items = require("./models/Items");
 const isAuthenticated = require("./middleware/auth-middleware");
@@ -13,11 +13,6 @@ app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
 Connection();
-
-var rezorpay = new Razorpay({
-  key_id: "rzp_test_ddXpXIjpWfDt1s",
-  key_secret: "8TsZO3kIctq4G0DRGzORx3hL",
-});
 
 const storage = multer.diskStorage({
   destination: (req, image, cb) => {
@@ -68,25 +63,8 @@ app.get("/getItems", isAuthenticated, async (req, res) => {
 
   res.json({ data: singlePost });
 });
-app.post("/rezorpay", isAuthenticated, async (req, res) => {
-  try {
-    const { new_price, quantity, name } = req.body;
-    const response = await rezorpay.orders.create({
-      amount: ((quantity ? quantity * new_price : new_price) * 100).toString(),
-      currency: "INR",
-      receipt: `${
-        quantity ? quantity * new_price : new_price
-      } paid for ${name}`,
-      // payment_capture,
-    });
-    console.log({ response });
-    res.json({
-      data: { data: { ...response, key: "rzp_test_ddXpXIjpWfDt1s" } },
-    });
-  } catch (err) {
-    console.log(err);
-  }
-});
+
+app.use("/payment", paymentRoutes);
 
 app.use("/user", userRoutes);
 
