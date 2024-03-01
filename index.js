@@ -2,16 +2,19 @@ const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config();
 const userRoutes = require("./routes/user");
 const paymentRoutes = require("./routes/rezorpay-payment");
 const Connection = require("./database/connection-db");
 const Items = require("./models/Items");
 const isAuthenticated = require("./middleware/auth-middleware");
+const { sendEmail } = require("./routes/send-email");
 
 const app = express();
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
+// app.use(bodyParser.json());
 Connection();
 
 const storage = multer.diskStorage({
@@ -67,6 +70,8 @@ app.get("/getItems", isAuthenticated, async (req, res) => {
 app.use("/payment", paymentRoutes);
 
 app.use("/user", userRoutes);
+
+app.use("/sendEmailToUser", isAuthenticated, sendEmail);
 
 app.listen(4000, () => {
   console.log("Serever is Listening on Post 4000");
